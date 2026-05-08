@@ -25,7 +25,7 @@
 
 ## Структура документации
 
-### [📁 Этап 0 — Инициация и бизнес-анализ](01-business-model/README.md)
+### [📁 Этап 0 — Инициация и бизнес-анализ](01-business-model/README.md) — 5%
 
 | Документ | Описание |
 |---|---|
@@ -39,7 +39,7 @@
 
 ---
 
-### [📁 Этап 1 — Проектирование требований](02-requirements/README.md)
+### [📁 Этап 1 — Проектирование требований](02-requirements/README.md) — 10%
 
 | Документ | Описание |
 |---|---|
@@ -51,7 +51,7 @@
 
 ---
 
-### [📁 Этап 2 — Архитектурное проектирование](03-architecture/README.md)
+### [📁 Этап 2 — Архитектурное проектирование](03-architecture/README.md) — 10%
 
 | Документ | Описание |
 |---|---|
@@ -62,12 +62,65 @@
 
 ---
 
-### [📁 Этап 3 — Проектирование базы данных](04-database/README.md)
+### [📁 Этап 3 — Проектирование базы данных](04-database/README.md) — 10%
 
 | Документ | Описание |
 |---|---|
 | [ER-диаграмма + описание таблиц](04-database/README.md) | Логическая модель, маппинг JPA |
 | [DDL-скрипты](04-database/ddl.sql) | Создание таблиц, индексов, ограничений PostgreSQL |
+
+---
+
+### [📁 Этап 4 — Детальное проектирование](05-detailed-design/README.md) — 10%
+
+| Документ | Описание |
+|---|---|
+| [Диаграммы последовательности](05-detailed-design/sequence-diagrams.md) | 4 сценария: login, create, save, delete |
+| [Диаграмма классов](05-detailed-design/class-diagram.md) | Детальная структура всех слоёв |
+| [Спецификация методов](05-detailed-design/method-specs.md) | Сигнатуры ключевых методов |
+
+---
+
+### [📁 Этап 5 — Реализация ядра](06-implementation/README.md) — 15%
+
+| Документ | Описание |
+|---|---|
+| [Entity-классы](06-implementation/core-entities.md) | User, TaskList, Task + DTO |
+| [Сервисный слой](06-implementation/services.md) | UserService, TaskListService, TaskService, JwtService |
+| [Тесты и покрытие](06-implementation/test-coverage.md) | JUnit 5 + JaCoCo (~55% покрытие) |
+
+---
+
+### [📁 Этап 6 — Рефакторинг и качество](07-refactoring/README.md) — 10%
+
+| Документ | Описание |
+|---|---|
+| [Статический анализ](07-refactoring/static-analysis.md) | SonarQube, Android Lint — до/после |
+| [Паттерны](07-refactoring/patterns.md) | Data Mapper, Identity Map, Lazy Load |
+| [Журнал рефакторинга](07-refactoring/refactoring-log.md) | 6 задокументированных изменений |
+
+---
+
+### [📁 Этап 7 — Интерфейс](08-interface/README.md) — 15%
+
+| Документ | Описание |
+|---|---|
+| [Мобильные экраны](08-interface/mobile-screens.md) | 7 экранов, Material Design 3, навигация |
+| [REST API](08-interface/api-endpoints.md) | 13 эндпоинтов, OpenAPI/Swagger |
+| [Безопасность](08-interface/security.md) | JWT, BCrypt, роли, CORS |
+| [Развёртывание](08-interface/deployment.md) | Инструкция по запуску сервера и клиента |
+
+---
+
+### [📁 Этап 8 — Завершение](09-completion/README.md) — 15%
+
+| Документ | Описание |
+|---|---|
+| [WBS](09-completion/wbs.md) | Иерархическая структура работ, ~199 ч |
+| [Диаграмма Ганта](09-completion/gantt.md) | Календарный план 18 недель |
+| [COCOMO](09-completion/cocomo.md) | Оценка трудозатрат (~3710 SLOC) |
+| [Руководство пользователя](09-completion/user-guide.md) | Инструкция по работе с приложением |
+| [Руководство администратора](09-completion/admin-guide.md) | Установка и настройка сервера |
 
 ---
 
@@ -77,6 +130,26 @@
 - ✅ Профиль пользователя (просмотр, редактирование имени)
 - ✅ CRUD папок с выбором цвета
 - ✅ CRUD задач с подзадачами, датой и временем
+- ✅ 13 REST API эндпоинтов с документацией OpenAPI
 - ✅ Синхронизация с серверной частью (Spring Boot + PostgreSQL)
 - ✅ Оффлайн-режим (локальный SQLite-кэш)
 - ✅ Удаление папки с каскадным удалением задач на сервере
+- ✅ Модульные тесты (JUnit 5 + Mockito, покрытие ~55%)
+- 🔲 Push-уведомления (бонусное задание)
+
+---
+
+## Статистика разработки
+
+### Метрики Git
+
+- Всего коммитов: [добавить перед сдачей]
+- Период: 01.03.2026 — [дата сдачи]
+
+### График активности
+
+![Активность коммитов](<images/git-commit-activity.png>)
+
+### Тепловая карта
+
+![Распределение по времени](<images/git-punch-card.png>)
