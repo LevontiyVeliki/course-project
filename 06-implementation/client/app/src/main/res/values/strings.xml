@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Планировщик</string>
+    <string name="add_task">Добавить задачу</string>
+    <string name="task_title">Название задачи</string>
+    <string name="task_description">Описание</string>
+    <string name="task_date">Дата</string>
+    <string name="task_time">Время</string>
+    <string name="subtasks">Подзадачи</string>
+    <string name="add_subtask">Добавить подзадачу</string>
+    <string name="save_task">Сохранить задачу</string>
+    <string name="subtask_hint">Новая подзадача</string>
+    <string name="remove_subtask">Удалить подзадачу</string>
+    <string name="delete_task">Удалить задачу</string>
+    <string name="edit_task">Редактировать задачу</string>
+    <string name="no_tasks">Нет задач. Нажмите +, чтобы добавить.</string>
+</resources>

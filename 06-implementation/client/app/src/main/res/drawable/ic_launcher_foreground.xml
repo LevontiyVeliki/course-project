@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Minimalist cat silhouette standing on a book.
+    White fill on transparent — background provides the color.
+    Viewport 108×108 (adaptive-icon foreground convention).
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- ── Book ─────────────────────────────────────── -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M17,81 L91,81 L91,93 Q54,97 17,93 Z"/>
+
+    <!-- Book spine (subtle darker line) -->
+    <path
+        android:fillColor="#30000000"
+        android:pathData="M52,81 L56,81 L56,94 L52,94 Z"/>
+
+    <!-- ── Cat body (oval) ──────────────────────────── -->
+    <!-- Ellipse center (54,67) rx=21 ry=15 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M33,67 A21,15 0 0 1 75,67 A21,15 0 0 1 33,67 Z"/>
+
+    <!-- ── Neck fill (connects head circle to body oval) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M46,51 L62,51 L62,56 L46,56 Z"/>
+
+    <!-- ── Cat head (circle) ────────────────────────── -->
+    <!-- Circle center (54,40) radius 14 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M40,40 A14,14 0 0 1 68,40 A14,14 0 0 1 40,40 Z"/>
+
+    <!-- ── Left ear ─────────────────────────────────── -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M40,34 L39,17 L53,29 Z"/>
+
+    <!-- ── Right ear ────────────────────────────────── -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M68,34 L69,17 L55,29 Z"/>
+
+    <!-- ── Tail (stroke only, curling up to the right) -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="4.5"
+        android:strokeLineCap="round"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M75,68 Q93,57 90,43 Q88,34 81,37"/>
+
+</vector>

@@ -1,0 +1,84 @@
+package com.example.taskplanner_new_1
+
+import android.content.Intent
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity  // kept for imports
+import androidx.appcompat.view.menu.MenuBuilder
+import com.example.taskplanner_new_1.api.RetrofitClient
+import com.example.taskplanner_new_1.auth.SessionManager
+import com.example.taskplanner_new_1.ui.FolderListFragment
+
+class MainActivity : BaseActivity() {
+
+    private lateinit var sessionManager: SessionManager
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        sessionManager = SessionManager(this)
+
+        // Если не авторизован — отправляем на логин
+        if (!sessionManager.isLoggedIn()) {
+            goToLogin()
+            return
+        }
+
+        // Восстанавливаем токен в Retrofit (на случай перезапуска)
+        RetrofitClient.token = sessionManager.getToken()
+
+        setContentView(R.layout.activity_main)
+
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, FolderListFragment())
+                .commit()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    /** Показываем иконки в выпадающем меню (overflow). */
+    @Suppress("RestrictedApi")
+    override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
+        (menu as? MenuBuilder)?.setOptionalIconsVisible(true)
+        return super.onMenuOpened(featureId, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_profile -> {
+                startActivity(Intent(this, ProfileActivity::class.java))
+                true
+            }
+            R.id.action_logout -> {
+                logout()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    /** Нажатие на стрелку «Назад» в ActionBar — возвращаемся к предыдущему фрагменту. */
+    override fun onSupportNavigateUp(): Boolean {
+        return supportFragmentManager.popBackStackImmediate() || super.onSupportNavigateUp()
+    }
+
+    private fun logout() {
+        sessionManager.clearSession()
+        RetrofitClient.token = null
+        goToLogin()
+    }
+
+    private fun goToLogin() {
+        val intent = Intent(this, LoginActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        startActivity(intent)
+        finish()
+    }
+}

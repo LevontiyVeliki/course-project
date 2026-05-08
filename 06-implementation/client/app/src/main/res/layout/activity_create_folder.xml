@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/create_folder_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        app:navigationIconTint="@android:color/white"
+        app:title="Новая папка"
+        app:titleTextColor="@android:color/white" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#F2F2F7">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="32dp">
+
+            <!-- Folder name input -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:paddingTop="24dp"
+                android:paddingBottom="8dp"
+                android:text="НАЗВАНИЕ ПАПКИ"
+                android:textSize="11sp"
+                android:letterSpacing="0.08"
+                android:textColor="#888888" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="12dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/folder_name_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Название папки"
+                    app:boxBackgroundColor="@android:color/white"
+                    app:boxStrokeColor="?attr/colorPrimary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_folder_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textNoSuggestions"
+                        android:maxLength="40"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Color picker -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:paddingTop="28dp"
+                android:paddingBottom="8dp"
+                android:text="ЦВЕТ ПАПКИ"
+                android:textSize="11sp"
+                android:letterSpacing="0.08"
+                android:textColor="#888888" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+
+                        <View android:id="@+id/fc_chip_0"
+                            android:layout_width="52dp" android:layout_height="52dp"
+                            android:layout_margin="10dp" android:clickable="true" android:focusable="true"/>
+                        <View android:id="@+id/fc_chip_1"
+                            android:layout_width="52dp" android:layout_height="52dp"
+                            android:layout_margin="10dp" android:clickable="true" android:focusable="true"/>
+                        <View android:id="@+id/fc_chip_2"
+                            android:layout_width="52dp" android:layout_height="52dp"
+                            android:layout_margin="10dp" android:clickable="true" android:focusable="true"/>
+                        <View android:id="@+id/fc_chip_3"
+                            android:layout_width="52dp" android:layout_height="52dp"
+                            android:layout_margin="10dp" android:clickable="true" android:focusable="true"/>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_selected_color_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorPrimary"
+                        android:text="Синий" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Create button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_create_folder"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="28dp"
+                android:text="Создать папку"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

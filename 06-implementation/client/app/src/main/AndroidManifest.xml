@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Разрешение на доступ к интернету -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".TaskPlannerApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.TaskPlannernew_1"
+        android:usesCleartextTraffic="true">
+
+        <!-- Экран входа — стартовый экран приложения -->
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Экран регистрации -->
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
+
+        <!-- Главный экран (список задач) -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+
+        <!-- Экран профиля / личного кабинета -->
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+
+        <!-- Экран настроек внешнего вида -->
+        <activity
+            android:name=".AppearanceActivity"
+            android:exported="false" />
+
+        <!-- Экран создания новой папки -->
+        <activity
+            android:name=".CreateFolderActivity"
+            android:exported="false" />
+
+    </application>
+
+</manifest>
