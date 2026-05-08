@@ -19,24 +19,20 @@
 
 ### Список папок (главный экран)
 
-![Список папок](<images/screen-folders.png>)
+![Список папок](images/screen-folders.jpg)
 
 ### Список задач в папке
 
-![Список задач](<images/screen-tasks.png>)
+![Список задач](images/screen-tasks.jpg)
 
 ### Редактор задачи
 
-![Редактор задачи](<images/screen-task-edit.png>)
+![Редактор задачи](images/screen-task-edit.jpg)
 
 ### Создание папки
 
-![Создание папки](<images/screen-create-folder.png>)
+![Создание папки](images/screen-create-folder.jpg)
 
 ### Профиль пользователя
 
-![Профиль](<images/screen-profile.png>)
-
-### Экран входа
-
-![Вход](<images/screen-login.png>)
+![Профиль](images/screen-profile.jpg)

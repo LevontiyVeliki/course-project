@@ -21,7 +21,7 @@
 - `TextView` — ссылка на регистрацию
 - `CircularProgressIndicator` во время запроса
 
-![Экран входа](<images/screen-login.png>)
+![Экран входа](images/screen-login.jpg)
 
 ---
 
@@ -32,7 +32,7 @@
 - Валидация: логин ≥ 3 символа, email корректный, пароль ≥ 6 символов
 - Переход на главный экран после успешной регистрации
 
-![Экран регистрации](<images/screen-register.png>)
+![Экран регистрации](images/screen-register.jpg)
 
 ---
 
@@ -51,7 +51,7 @@
 - `FloatingActionButton`
 - `ImageButton` (корзина)
 
-![Список папок](<images/screen-folders.png>)
+![Список папок](images/screen-folders.jpg)
 
 ---
 
@@ -68,7 +68,7 @@
 - `LinearLayout` с цветными чипами (`View` + `GradientDrawable`)
 - Два `MaterialButton`
 
-![Создание папки](<images/screen-create-folder.png>)
+![Создание папки](images/screen-create-folder.jpg)
 
 ---
 
@@ -87,7 +87,7 @@
 - `CheckBox` для статуса
 - `FloatingActionButton`
 
-![Список задач](<images/screen-tasks.png>)
+![Список задач](images/screen-tasks.jpg)
 
 ---
 
@@ -108,7 +108,7 @@
 - `RecyclerView` для подзадач
 - Два `MaterialButton`
 
-![Редактор задачи](<images/screen-task-edit.png>)
+![Редактор задачи](images/screen-task-edit.jpg)
 
 ---
 
@@ -120,7 +120,7 @@
 - Выход из аккаунта
 - Данные берутся из кэша (`SharedPreferences`) и обновляются с сервера
 
-![Профиль](<images/screen-profile.png>)
+![Профиль](images/screen-profile.jpg)
 
 ---
 
