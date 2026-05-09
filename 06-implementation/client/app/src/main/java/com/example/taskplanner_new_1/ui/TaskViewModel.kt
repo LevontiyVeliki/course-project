@@ -23,6 +23,8 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
     private val _tasks = MutableLiveData<List<Task>>()
     val tasks: LiveData<List<Task>> = _tasks
 
+    private var currentFolderId: Long = -1L
+
     init {
         loadTasks()
     }
@@ -33,14 +35,23 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
 
     /** Load only tasks belonging to a specific folder. */
     fun loadTasksForFolder(folderId: Long) {
+        currentFolderId = folderId
         _tasks.value = dbHelper.getTasksForFolder(folderId)
+    }
+
+    private fun refreshTasks() {
+        if (currentFolderId != -1L) {
+            _tasks.value = dbHelper.getTasksForFolder(currentFolderId)
+        } else {
+            _tasks.value = dbHelper.getAllTasks()
+        }
     }
 
     // ── Task operations ───────────────────────────────────────────────────────
 
     fun insertTask(task: Task): Long {
         val localId = dbHelper.insertTask(task)
-        loadTasks()
+        refreshTasks()
         viewModelScope.launch(Dispatchers.IO) {
             syncCreateTask(localId, task)
         }
@@ -51,7 +62,7 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
         val existingServerId = dbHelper.getTask(task.id)?.serverId ?: -1L
         val taskWithServer = task.copy(serverId = existingServerId)
         dbHelper.updateTask(taskWithServer)
-        loadTasks()
+        refreshTasks()
         viewModelScope.launch(Dispatchers.IO) {
             syncSaveTask(taskWithServer)
         }
@@ -61,7 +72,7 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
         val serverId = dbHelper.getTask(taskId)?.serverId ?: -1L
         val taskTitle = dbHelper.getTask(taskId)?.title ?: ""
         dbHelper.deleteTask(taskId)
-        loadTasks()
+        refreshTasks()
         viewModelScope.launch(Dispatchers.IO) {
             syncDeleteTask(serverId, taskTitle)
         }
@@ -73,17 +84,17 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
 
     fun insertSubtask(subtask: Subtask) {
         dbHelper.insertSubtask(subtask)
-        loadTasks()
+        refreshTasks()
     }
 
     fun updateSubtask(subtask: Subtask) {
         dbHelper.updateSubtask(subtask)
-        loadTasks()
+        refreshTasks()
     }
 
     fun deleteSubtask(subtaskId: Long) {
         dbHelper.deleteSubtask(subtaskId)
-        loadTasks()
+        refreshTasks()
     }
 
     // ── Private sync helpers ──────────────────────────────────────────────────
