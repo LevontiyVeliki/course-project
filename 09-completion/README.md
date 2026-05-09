@@ -19,8 +19,8 @@
 
 ## WBS (верхний уровень)
 
-![WBS-диаграмма](<images/wbs-diagram.png>)
+![WBS-диаграмма](images/WBS.png)
 
 ## Диаграмма Ганта
 
-![Диаграмма Ганта](<images/gantt-chart.png>)
+![Диаграмма Ганта](images/Gant.png)

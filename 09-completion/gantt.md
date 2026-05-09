@@ -2,7 +2,88 @@
 
 ## Диаграмма
 
-![Диаграмма Ганта](<images/gantt-chart.png>)
+![Диаграмма Ганта](images/Gant.png)
+
+## PlantUML-источник
+
+```plantuml
+@startgantt
+Project starts 2026-03-01
+printscale weekly zoom 1
+saturday are closed
+sunday are closed
+
+skinparam ganttArrowColor #1565C0
+skinparam ganttArrowFontColor #333333
+
+<style>
+ganttDiagram {
+  task {
+    BackgroundColor #BBDEFB
+    LineColor #1565C0
+    FontColor #0D47A1
+  }
+  milestone {
+    BackgroundColor #1565C0
+    FontColor white
+    LineColor #0D47A1
+  }
+  note {
+    BackgroundColor #FFF9C4
+    LineColor #F9A825
+  }
+}
+</style>
+
+-- Этап 0: Инициация (5%) --
+[Бизнес-анализ и паспорт]         as [E0]  starts 2026-03-01  and ends 2026-03-14
+[E0]                                        is colored in #90CAF9/SteelBlue
+[✔ Сдача Этапа 0]                  happens at [E0]'s end
+
+-- Этап 1: Требования (10%) --
+[Проектирование требований]        as [E1]  starts 2026-03-15  and ends 2026-03-28
+[E1]                                        is colored in #81C784/SeaGreen
+[✔ Сдача Этапа 1]                  happens at [E1]'s end
+
+-- Этап 2: Архитектура (10%) --
+[Архитектурное проектирование]     as [E2]  starts 2026-03-29  and ends 2026-04-11
+[E2]                                        is colored in #9575CD/SlateBlue
+[✔ Сдача Этапа 2]                  happens at [E2]'s end
+
+-- Этап 3: База данных (10%) --
+[Проектирование БД]                as [E3]  starts 2026-04-12  and ends 2026-04-25
+[E3]                                        is colored in #4DB6AC/Teal
+[✔ Сдача Этапа 3]                  happens at [E3]'s end
+
+-- Этап 4: Детальное проектирование (10%) --
+[Детальное проектирование]         as [E4]  starts 2026-04-26  and ends 2026-05-09
+[E4]                                        is colored in #FFB74D/DarkOrange
+[✔ Сдача Этапа 4]                  happens at [E4]'s end
+
+-- Этап 5: Реализация ядра (15%) --
+[Серверная часть]                  as [E5a] starts 2026-05-10  and ends 2026-05-23
+[Мобильное приложение]             as [E5b] starts 2026-05-10  and ends 2026-05-23
+[E5a]                                       is colored in #EF5350/Crimson
+[E5b]                                       is colored in #EC407A/DeepPink
+[✔ Сдача Этапа 5]                  happens at [E5b]'s end
+
+-- Этап 6: Рефакторинг (10%) --
+[Рефакторинг и качество]           as [E6]  starts 2026-05-24  and ends 2026-06-06
+[E6]                                        is colored in #8D6E63/SaddleBrown
+[✔ Сдача Этапа 6]                  happens at [E6]'s end
+
+-- Этап 7: Интерфейс (15%) --
+[Интерфейс и API-документация]     as [E7]  starts 2026-06-07  and ends 2026-06-20
+[E7]                                        is colored in #26A69A/DarkCyan
+[✔ Сдача Этапа 7]                  happens at [E7]'s end
+
+-- Этап 8: Завершение (15%) --
+[Руководства и пояснительная]      as [E8]  starts 2026-06-21  and ends 2026-07-04
+[E8]                                        is colored in #7E57C2/DarkViolet
+[🏁 Финальная защита]              happens at [E8]'s end
+
+@endgantt
+```
 
 ---
 

@@ -2,7 +2,98 @@
 
 ## Диаграмма
 
-![WBS-диаграмма](<images/wbs-diagram.png>)
+![WBS-диаграмма](images/WBS.png)
+
+## PlantUML-источник
+
+```plantuml
+@startwbs WBS
+skinparam ArrowColor #555555
+skinparam NodeBackgroundColor #E3F2FD
+skinparam NodeBorderColor #1565C0
+skinparam NodeFontColor #0D47A1
+skinparam NodeFontSize 12
+
+<style>
+wbsDiagram {
+  .root {
+    BackgroundColor #1565C0
+    FontColor white
+    FontSize 14
+  }
+  .group {
+    BackgroundColor #1976D2
+    FontColor white
+    FontSize 12
+  }
+  .task {
+    BackgroundColor #E3F2FD
+    FontColor #0D47A1
+  }
+}
+</style>
+
+* Plan Day — TaskPlanner\n**Итого: 199 часов** <<root>>
+** 1. Инициация и анализ\n23 ч <<group>>
+*** 1.1 Выбор темы и формулировка проблемы — 3 ч <<task>>
+*** 1.2 Паспорт проекта — 4 ч <<task>>
+*** 1.3 IDEF0 A-0 — 3 ч <<task>>
+*** 1.4 BUC-диаграмма — 3 ч <<task>>
+*** 1.5 Бизнес-глоссарий — 3 ч <<task>>
+*** 1.6 Модель бизнес-классов — 3 ч <<task>>
+*** 1.7 SWOT-анализ — 2 ч <<task>>
+*** 1.8 Матрица стейкхолдеров — 2 ч <<task>>
+** 2. Проектирование требований\n18 ч <<group>>
+*** 2.1 Use Case диаграмма — 4 ч <<task>>
+*** 2.2 Domain Model — 4 ч <<task>>
+*** 2.3 Спецификации прецедентов — 5 ч <<task>>
+*** 2.4 Расширенный глоссарий — 3 ч <<task>>
+*** 2.5 Таблица трассировки — 2 ч <<task>>
+** 3. Архитектурное проектирование\n16 ч <<group>>
+*** 3.1 PCMEF-диаграмма — 5 ч <<task>>
+*** 3.2 Спецификация интерфейсов — 4 ч <<task>>
+*** 3.3 Диаграмма зависимостей — 3 ч <<task>>
+*** 3.4 ADR (5 решений) — 4 ч <<task>>
+** 4. Проектирование БД\n9 ч <<group>>
+*** 4.1 ER-диаграмма — 4 ч <<task>>
+*** 4.2 DDL-скрипты — 3 ч <<task>>
+*** 4.3 ORM-маппинг — 2 ч <<task>>
+** 5. Детальное проектирование\n15 ч <<group>>
+*** 5.1 Диаграммы последовательности — 6 ч <<task>>
+*** 5.2 Диаграмма классов — 5 ч <<task>>
+*** 5.3 Спецификация методов — 4 ч <<task>>
+** 6. Серверная часть\n40 ч <<group>>
+*** 6.1 Entity-классы + enum — 4 ч <<task>>
+*** 6.2 Repository-интерфейсы — 3 ч <<task>>
+*** 6.3 Service-классы — 8 ч <<task>>
+*** 6.4 REST-контроллеры — 6 ч <<task>>
+*** 6.5 JWT + Spring Security — 5 ч <<task>>
+*** 6.6 DTO + маппер-классы — 4 ч <<task>>
+*** 6.7 Модульные тесты (JUnit) — 8 ч <<task>>
+*** 6.8 Swagger / OpenAPI — 2 ч <<task>>
+** 7. Мобильное приложение\n42 ч <<group>>
+*** 7.1 LoginActivity + RegisterActivity — 5 ч <<task>>
+*** 7.2 FolderListFragment — 5 ч <<task>>
+*** 7.3 CreateFolderActivity — 4 ч <<task>>
+*** 7.4 FolderTasksFragment — 5 ч <<task>>
+*** 7.5 TaskEditFragment — 6 ч <<task>>
+*** 7.6 ProfileActivity — 4 ч <<task>>
+*** 7.7 SQLite (TaskDatabaseHelper) — 5 ч <<task>>
+*** 7.8 Retrofit + API-интеграция — 6 ч <<task>>
+*** 7.9 SessionManager — 2 ч <<task>>
+** 8. Рефакторинг и качество\n13 ч <<group>>
+*** 8.1 Статический анализ (Lint, SonarQube) — 3 ч <<task>>
+*** 8.2 Внедрение Data Mapper — 4 ч <<task>>
+*** 8.3 Исправление замечаний — 3 ч <<task>>
+*** 8.4 Обновление тестов — 3 ч <<task>>
+** 9. Документирование\n23 ч <<group>>
+*** 9.1 WBS и диаграмма Ганта — 3 ч <<task>>
+*** 9.2 Техническое задание — 5 ч <<task>>
+*** 9.3 Руководство пользователя — 4 ч <<task>>
+*** 9.4 Руководство администратора — 3 ч <<task>>
+*** 9.5 Пояснительная записка — 8 ч <<task>>
+@endwbs
+```
 
 ---
 
