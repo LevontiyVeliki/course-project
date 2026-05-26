@@ -79,11 +79,12 @@ public ResponseEntity<List<TaskResponse>> getByList(
 );
 
 /**
- * POST /api/tasks
+ * POST /api/tasks/tasklist/{taskListId}
  * Создание задачи в указанной папке.
  */
-@PostMapping
+@PostMapping("/tasklist/{taskListId}")
 public ResponseEntity<TaskResponse> create(
+    @PathVariable Long taskListId,
     @Valid @RequestBody CreateTaskRequest request,
     Principal principal
 );

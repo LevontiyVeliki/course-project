@@ -25,22 +25,22 @@ participant "AuthController\n(Spring)" as AC
 participant "UserService" as US
 database "UserRepository\n(PostgreSQL)" as UR
 
-User -> LF : Вводит email + пароль,\nнажимает «Войти»
+User -> LF : Вводит логин (имя пользователя) + пароль,\nнажимает «Войти»
 activate LF
 
-LF -> AVM : login(email, password)
+LF -> AVM : login(username, password)
 activate AVM
 
-AVM -> RC : POST /api/auth/login\n{email, password}
+AVM -> RC : POST /api/auth/login\n{username, password}
 activate RC
 
-RC -> AC : LoginRequest(email, password)
+RC -> AC : LoginRequest(username, password)
 activate AC
 
 AC -> US : authenticate(request)
 activate US
 
-US -> UR : findByEmail(email)
+US -> UR : findByUsername(username)
 activate UR
 UR --> US : Optional<User>
 deactivate UR
@@ -117,7 +117,7 @@ activate DB
 DB --> FVM : localId
 deactivate DB
 
-FVM -> RC : POST /api/task-lists\n{name, targetDate}\nAuthorization: Bearer <JWT>
+FVM -> RC : POST /api/tasklists\n{name, targetDate}\nAuthorization: Bearer <JWT>
 activate RC
 
 RC -> TLC : CreateTaskListRequest(name, date)
@@ -193,7 +193,7 @@ alt Новая задача (taskId == -1)
     DB --> TVM : localTaskId
     deactivate DB
 
-    TVM -> RC : POST /api/tasks\n{taskListId, description, priority}
+    TVM -> RC : POST /api/tasks/tasklist/{taskListId}\n{description, priority, status}
     activate RC
     RC -> TC : CreateTaskRequest
     activate TC
@@ -297,7 +297,7 @@ deactivate FLF
 
 note over FVM, RC : Асинхронно (IO dispatcher)
 loop Для каждого serverId > 0
-    FVM -> RC : DELETE /api/task-lists/{serverId}\nAuthorization: Bearer <JWT>
+    FVM -> RC : DELETE /api/tasklists/{serverId}\nAuthorization: Bearer <JWT>
     activate RC
     RC -> TLC : deleteTaskList(serverId, userId)
     activate TLC

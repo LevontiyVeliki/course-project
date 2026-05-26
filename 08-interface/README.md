@@ -8,8 +8,8 @@
 
 | Артефакт | Описание | Документ |
 |---|---|---|
-| Мобильный интерфейс | 7 экранов, Material Design 3 | [mobile-screens.md](mobile-screens.md) |
-| REST API | 12 эндпоинтов, OpenAPI | [api-endpoints.md](api-endpoints.md) |
+| Мобильный интерфейс | 8 экранов, Material Design 3 | [mobile-screens.md](mobile-screens.md) |
+| REST API | 15 эндпоинтов, OpenAPI | [api-endpoints.md](api-endpoints.md) |
 | Безопасность | JWT, BCrypt, роли | [security.md](security.md) |
 | Развёртывание | Запуск сервера и клиента | [deployment.md](deployment.md) |
 

@@ -35,7 +35,7 @@
 Обрабатывает входящие HTTP-запросы, валидирует входные данные, маршрутизирует к соответствующим сервисам.
 
 - `AuthController` — `/api/auth/**` (login, register)
-- `TaskListController` — `/api/task-lists/**` (CRUD папок)
+- `TaskListController` — `/api/tasklists/**` (CRUD папок)
 - `TaskController` — `/api/tasks/**` (CRUD задач)
 - `UserController` — `/api/users/**` (профиль пользователя)
 
@@ -46,7 +46,7 @@
 - `UserService` / `IUserService`
 - `TaskListService` / `ITaskListService`
 - `TaskService` / `ITaskService`
-- `JwtService` — генерация и валидация JWT-токенов
+- `JwtTokenProvider` — генерация и валидация JWT-токенов
 
 ### E — Entity (JPA-сущности)
 
