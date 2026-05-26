@@ -13,4 +13,7 @@
     <string name="delete_task">Удалить задачу</string>
     <string name="edit_task">Редактировать задачу</string>
     <string name="no_tasks">Нет задач. Нажмите +, чтобы добавить.</string>
+    <string name="notification_channel_name">Напоминания о задачах</string>
+    <string name="notification_channel_desc">Уведомления о приближающихся задачах</string>
+    <string name="notification_title">Напоминание о задаче</string>
 </resources>

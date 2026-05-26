@@ -10,7 +10,7 @@ class TaskDatabaseHelper(context: Context) :
 
     companion object {
         const val DATABASE_NAME    = "taskplanner.db"
-        const val DATABASE_VERSION = 3          // v3: added folders table + folder_id in tasks
+        const val DATABASE_VERSION = 4          // v4: added server_id to folders
 
         // tasks
         const val TABLE_TASKS    = "tasks"
@@ -21,16 +21,17 @@ class TaskDatabaseHelper(context: Context) :
         const val COL_TIME       = "time"
         const val COL_IS_DONE    = "is_done"
         const val COL_SERVER_ID  = "server_id"
-        const val COL_FOLDER_ID  = "folder_id"   // NEW in v3
+        const val COL_FOLDER_ID  = "folder_id"   // added in v3
 
         // subtasks
         const val TABLE_SUBTASKS = "subtasks"
         const val COL_TASK_ID    = "task_id"
 
         // folders
-        const val TABLE_FOLDERS      = "folders"
-        const val COL_FOLDER_NAME    = "name"
-        const val COL_FOLDER_COLOR   = "color_index"
+        const val TABLE_FOLDERS        = "folders"
+        const val COL_FOLDER_NAME      = "name"
+        const val COL_FOLDER_COLOR     = "color_index"
+        const val COL_FOLDER_SERVER_ID = "server_id"   // added in v4
     }
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -60,14 +61,15 @@ class TaskDatabaseHelper(context: Context) :
 
         db.execSQL("""
             CREATE TABLE $TABLE_FOLDERS (
-                $COL_ID           INTEGER PRIMARY KEY AUTOINCREMENT,
-                $COL_FOLDER_NAME  TEXT NOT NULL,
-                $COL_FOLDER_COLOR INTEGER DEFAULT 0
+                $COL_ID                 INTEGER PRIMARY KEY AUTOINCREMENT,
+                $COL_FOLDER_NAME        TEXT NOT NULL,
+                $COL_FOLDER_COLOR       INTEGER DEFAULT 0,
+                $COL_FOLDER_SERVER_ID   INTEGER DEFAULT -1
             )
         """.trimIndent())
 
         // Default folder for fresh installs
-        db.execSQL("INSERT INTO $TABLE_FOLDERS ($COL_FOLDER_NAME, $COL_FOLDER_COLOR) VALUES ('Мои задачи', 1)")
+        db.execSQL("INSERT INTO $TABLE_FOLDERS ($COL_FOLDER_NAME, $COL_FOLDER_COLOR, $COL_FOLDER_SERVER_ID) VALUES ('Мои задачи', 1, -1)")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -89,6 +91,10 @@ class TaskDatabaseHelper(context: Context) :
             db.execSQL("INSERT INTO $TABLE_FOLDERS ($COL_FOLDER_NAME, $COL_FOLDER_COLOR) VALUES ('Мои задачи', 1)")
             db.execSQL("UPDATE $TABLE_TASKS SET $COL_FOLDER_ID = (SELECT $COL_ID FROM $TABLE_FOLDERS LIMIT 1)")
         }
+        if (oldVersion < 4) {
+            // Add server_id column to folders table
+            db.execSQL("ALTER TABLE $TABLE_FOLDERS ADD COLUMN $COL_FOLDER_SERVER_ID INTEGER DEFAULT -1")
+        }
     }
 
     // ── Folder CRUD ──────────────────────────────────────────────────────────
@@ -96,8 +102,9 @@ class TaskDatabaseHelper(context: Context) :
     fun insertFolder(folder: Folder): Long {
         val db = writableDatabase
         val values = ContentValues().apply {
-            put(COL_FOLDER_NAME,  folder.name)
-            put(COL_FOLDER_COLOR, folder.colorIndex)
+            put(COL_FOLDER_NAME,        folder.name)
+            put(COL_FOLDER_COLOR,       folder.colorIndex)
+            put(COL_FOLDER_SERVER_ID,   folder.serverId)
         }
         return db.insert(TABLE_FOLDERS, null, values)
     }
@@ -105,10 +112,17 @@ class TaskDatabaseHelper(context: Context) :
     fun updateFolder(folder: Folder): Int {
         val db = writableDatabase
         val values = ContentValues().apply {
-            put(COL_FOLDER_NAME,  folder.name)
-            put(COL_FOLDER_COLOR, folder.colorIndex)
+            put(COL_FOLDER_NAME,        folder.name)
+            put(COL_FOLDER_COLOR,       folder.colorIndex)
+            put(COL_FOLDER_SERVER_ID,   folder.serverId)
         }
         return db.update(TABLE_FOLDERS, values, "$COL_ID = ?", arrayOf(folder.id.toString()))
+    }
+
+    fun updateFolderServerId(localId: Long, serverId: Long) {
+        val db = writableDatabase
+        val values = ContentValues().apply { put(COL_FOLDER_SERVER_ID, serverId) }
+        db.update(TABLE_FOLDERS, values, "$COL_ID = ?", arrayOf(localId.toString()))
     }
 
     fun deleteFolder(folderId: Long) {
@@ -151,11 +165,13 @@ class TaskDatabaseHelper(context: Context) :
     }
 
     private fun cursorToFolder(cursor: android.database.Cursor): Folder {
-        val id    = cursor.getLong(cursor.getColumnIndexOrThrow(COL_ID))
-        val name  = cursor.getString(cursor.getColumnIndexOrThrow(COL_FOLDER_NAME))
-        val color = cursor.getInt(cursor.getColumnIndexOrThrow(COL_FOLDER_COLOR))
-        val count = countTasksInFolder(id)
-        return Folder(id, name, color, count)
+        val id       = cursor.getLong(cursor.getColumnIndexOrThrow(COL_ID))
+        val name     = cursor.getString(cursor.getColumnIndexOrThrow(COL_FOLDER_NAME))
+        val color    = cursor.getInt(cursor.getColumnIndexOrThrow(COL_FOLDER_COLOR))
+        val count    = countTasksInFolder(id)
+        val sidIdx   = cursor.getColumnIndex(COL_FOLDER_SERVER_ID)
+        val serverId = if (sidIdx >= 0) cursor.getLong(sidIdx) else -1L
+        return Folder(id, name, color, count, serverId)
     }
 
     fun countTasksInFolder(folderId: Long): Int {
@@ -234,6 +250,45 @@ class TaskDatabaseHelper(context: Context) :
         while (cursor.moveToNext()) tasks.add(cursorToTask(cursor))
         cursor.close()
         return tasks
+    }
+
+    /** Returns a task by its server-side id, or null if not found. */
+    fun getTaskByServerId(serverId: Long): Task? {
+        if (serverId <= 0) return null
+        val db = readableDatabase
+        val cursor = db.query(TABLE_TASKS, null, "$COL_SERVER_ID = ?",
+            arrayOf(serverId.toString()), null, null, null)
+        return if (cursor.moveToFirst()) {
+            val task = cursorToTask(cursor)
+            cursor.close()
+            task
+        } else {
+            cursor.close()
+            null
+        }
+    }
+
+    /**
+     * Wipes all user data from SQLite and re-creates the single default folder.
+     * Call this on logout so the next user starts with a clean slate.
+     */
+    fun clearAllData() {
+        val db = writableDatabase
+        db.delete(TABLE_SUBTASKS, null, null)
+        db.delete(TABLE_TASKS,    null, null)
+        db.delete(TABLE_FOLDERS,  null, null)
+        db.execSQL("INSERT INTO $TABLE_FOLDERS ($COL_FOLDER_NAME, $COL_FOLDER_COLOR) VALUES ('Мои задачи', 1)")
+    }
+
+    /**
+     * Wipes all user data from SQLite WITHOUT creating a default folder.
+     * Use before syncing from the server so fresh server data fills the DB cleanly.
+     */
+    fun clearForUserSwitch() {
+        val db = writableDatabase
+        db.delete(TABLE_SUBTASKS, null, null)
+        db.delete(TABLE_TASKS,    null, null)
+        db.delete(TABLE_FOLDERS,  null, null)
     }
 
     /** Returns tasks that belong to a specific folder. */

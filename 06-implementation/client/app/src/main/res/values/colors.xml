@@ -9,6 +9,18 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <!-- ── Semantic / adaptive colors ──────────────── -->
+    <!-- Page background (replaces hardcoded #F2F2F7) -->
+    <color name="surface_bg">#F2F2F7</color>
+    <!-- Secondary / hint text (replaces #888888, #757575) -->
+    <color name="text_secondary">#888888</color>
+    <!-- Primary value text inside cards (replaces #212121) -->
+    <color name="text_primary_value">#212121</color>
+    <!-- Divider lines inside cards (replaces #F0F0F0) -->
+    <color name="divider_line">#F0F0F0</color>
+    <!-- Input field background (replaces @android:color/white in TextInputLayout) -->
+    <color name="input_box_bg">#FFFFFF</color>
+
     <!-- ── Theme accent colors ─────────────────────── -->
     <color name="theme_purple_primary">#FF6200EE</color>
     <color name="theme_purple_variant">#FF3700B3</color>

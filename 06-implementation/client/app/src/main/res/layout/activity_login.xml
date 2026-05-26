@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:text="Войдите в аккаунт"
             android:textSize="14sp"
-            android:textColor="#757575"
+            android:textColor="@color/text_secondary"
             android:layout_marginBottom="40dp" />
 
         <!-- Поле: имя пользователя -->

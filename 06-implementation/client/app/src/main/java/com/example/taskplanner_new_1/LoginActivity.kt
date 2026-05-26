@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.taskplanner_new_1.api.LoginRequest
 import com.example.taskplanner_new_1.api.RetrofitClient
 import com.example.taskplanner_new_1.auth.SessionManager
+import com.example.taskplanner_new_1.data.TaskDatabaseHelper
 import com.example.taskplanner_new_1.databinding.ActivityLoginBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -60,29 +61,33 @@ class LoginActivity : BaseActivity() {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val response = RetrofitClient.instance.login(LoginRequest(username, password))
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        val jwt = response.body()
-                        if (jwt != null) {
+                if (response.isSuccessful) {
+                    val jwt = response.body()
+                    if (jwt != null) {
+                        // Running on IO — safe to clear SQLite here before switching to Main.
+                        // This wipes any stale data from a previous session so syncFromServer()
+                        // can fill the DB from scratch after the user lands on MainActivity.
+                        TaskDatabaseHelper(this@LoginActivity).clearForUserSwitch()
+                        withContext(Dispatchers.Main) {
                             sessionManager.saveSession(jwt.token, jwt.id, jwt.username, jwt.email)
                             RetrofitClient.token = jwt.token
                             goToMain()
-                        } else {
-                            showError("Пустой ответ от сервера")
                         }
                     } else {
-                        val errorBody = response.errorBody()?.string()
-                        val msg = try {
-                            JSONObject(errorBody ?: "").getString("error")
-                        } catch (e: Exception) {
-                            "Неверное имя пользователя или пароль"
-                        }
-                        showError(msg)
+                        withContext(Dispatchers.Main) { showError("Пустой ответ от сервера") }
                     }
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    val msg = try {
+                        JSONObject(errorBody ?: "").getString("error")
+                    } catch (e: Exception) {
+                        "Неверное имя пользователя или пароль"
+                    }
+                    withContext(Dispatchers.Main) { showError(msg) }
                 }
             } catch (e: IOException) {
                 withContext(Dispatchers.Main) {
-                    showError("Нет подключения к серверу")
+                    showError("Нет подключения к серверу\n(${RetrofitClient.BASE_URL})\n${e.localizedMessage}")
                 }
             } catch (e: HttpException) {
                 withContext(Dispatchers.Main) {

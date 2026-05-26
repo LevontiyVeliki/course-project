@@ -15,6 +15,8 @@ import com.example.taskplanner_new_1.CreateFolderActivity
 import com.example.taskplanner_new_1.R
 import com.example.taskplanner_new_1.data.Folder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.example.taskplanner_new_1.CreateFolderActivity.Companion.EXTRA_FOLDER_NAME
+import com.example.taskplanner_new_1.CreateFolderActivity.Companion.EXTRA_FOLDER_COLOR
 
 class FolderListFragment : Fragment() {
 
@@ -25,7 +27,10 @@ class FolderListFragment : Fragment() {
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            viewModel.loadFolders()
+            val name  = result.data?.getStringExtra(EXTRA_FOLDER_NAME) ?: return@registerForActivityResult
+            val color = result.data?.getIntExtra(EXTRA_FOLDER_COLOR, 0) ?: 0
+            // Insert via Activity-scoped ViewModel so the sync coroutine isn't cancelled
+            viewModel.insertFolder(Folder(name = name, colorIndex = color))
         }
     }
 

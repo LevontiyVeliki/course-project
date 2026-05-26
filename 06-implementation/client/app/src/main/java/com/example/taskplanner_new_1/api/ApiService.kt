@@ -47,9 +47,9 @@ data class UserProfileResponse(
 data class UpdateProfileRequest(val fullName: String)
 data class ChangePasswordRequest(val newPassword: String)
 
-// ── TaskList DTOs ─────────────────────────────────────────────────────────────
+// ── TaskList (Folder) DTOs ────────────────────────────────────────────────────
 
-/** Body sent when creating or updating a TaskList on the server. */
+/** Body sent when creating or updating a TaskList (folder) on the server. */
 data class TaskListRequest(
     val name: String,
     val targetDate: String,     // "yyyy-MM-dd"
@@ -62,6 +62,25 @@ data class TaskListResponse(
     val name: String = "",
     val targetDate: String = "",
     val status: String = ""
+)
+
+// ── Task DTOs ─────────────────────────────────────────────────────────────────
+
+/** Body sent when creating or updating a Task on the server. */
+data class TaskRequest(
+    val description: String,            // maps to local Task.title
+    val status: String = "PENDING",     // PENDING | COMPLETED | OVERDUE
+    val priority: String = "MEDIUM",    // LOW | MEDIUM | HIGH
+    val orderIndex: Int = 0
+)
+
+/** Fields we care about from the server's Task response. */
+data class TaskResponse(
+    val id: Long = -1L,
+    val description: String = "",
+    val status: String = "PENDING",
+    val priority: String = "MEDIUM",
+    val orderIndex: Int = 0
 )
 
 // ── API interface ─────────────────────────────────────────────────────────────
@@ -85,7 +104,7 @@ interface ApiService {
     @PATCH("api/users/me/password")
     suspend fun changePassword(@Body request: ChangePasswordRequest): Response<Void>
 
-    // TaskLists (maps to Android "Task / task group")
+    // TaskLists = Folders on the server
     @GET("api/tasklists")
     suspend fun getTaskLists(): Response<List<TaskListResponse>>
 
@@ -100,4 +119,23 @@ interface ApiService {
 
     @DELETE("api/tasklists/{id}")
     suspend fun deleteTaskList(@Path("id") id: Long): Response<Void>
+
+    // Tasks = individual tasks inside a folder
+    @GET("api/tasks/tasklist/{taskListId}")
+    suspend fun getTasksForFolder(@Path("taskListId") taskListId: Long): Response<List<TaskResponse>>
+
+    @POST("api/tasks/tasklist/{taskListId}")
+    suspend fun createServerTask(
+        @Path("taskListId") taskListId: Long,
+        @Body request: TaskRequest
+    ): Response<TaskResponse>
+
+    @PUT("api/tasks/{id}")
+    suspend fun updateServerTask(
+        @Path("id") id: Long,
+        @Body request: TaskRequest
+    ): Response<TaskResponse>
+
+    @DELETE("api/tasks/{id}")
+    suspend fun deleteServerTask(@Path("id") id: Long): Response<Void>
 }

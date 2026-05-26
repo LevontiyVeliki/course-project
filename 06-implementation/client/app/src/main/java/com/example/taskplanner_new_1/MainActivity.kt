@@ -1,18 +1,29 @@
 package com.example.taskplanner_new_1
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity  // kept for imports
 import androidx.appcompat.view.menu.MenuBuilder
+import androidx.core.content.ContextCompat
 import com.example.taskplanner_new_1.api.RetrofitClient
 import com.example.taskplanner_new_1.auth.SessionManager
+import com.example.taskplanner_new_1.data.TaskDatabaseHelper
 import com.example.taskplanner_new_1.ui.FolderListFragment
 
 class MainActivity : BaseActivity() {
 
     private lateinit var sessionManager: SessionManager
+
+    // Launcher for POST_NOTIFICATIONS permission (Android 13+)
+    private val notificationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { /* permission granted/denied — notifications work either way */ }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +34,15 @@ class MainActivity : BaseActivity() {
         if (!sessionManager.isLoggedIn()) {
             goToLogin()
             return
+        }
+
+        // Request notification permission on Android 13+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
         }
 
         // Восстанавливаем токен в Retrofit (на случай перезапуска)
@@ -69,6 +89,9 @@ class MainActivity : BaseActivity() {
     }
 
     private fun logout() {
+        // Wipe local SQLite without creating a default folder — the next login's
+        // syncFromServer() will repopulate everything from the server.
+        TaskDatabaseHelper(this).clearForUserSwitch()
         sessionManager.clearSession()
         RetrofitClient.token = null
         goToLogin()

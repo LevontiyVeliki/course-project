@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F2F2F7">
+    android:background="@color/surface_bg">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/folder_recycler_view"
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textSize="14sp"
-            android:textColor="#888888"
+            android:textColor="@color/text_secondary"
             android:gravity="center"
             android:text="Нажмите + чтобы создать первую папку" />
 

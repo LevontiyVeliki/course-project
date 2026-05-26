@@ -1,18 +1,23 @@
 package com.example.taskplanner_new_1
 
 import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
 import com.example.taskplanner_new_1.data.Folder
-import com.example.taskplanner_new_1.data.TaskDatabaseHelper
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 
 class CreateFolderActivity : BaseActivity() {
+
+    companion object {
+        const val EXTRA_FOLDER_NAME  = "extra_folder_name"
+        const val EXTRA_FOLDER_COLOR = "extra_folder_color"
+    }
 
     private var selectedColorIndex = 1   // default: Синий
 
@@ -41,9 +46,12 @@ class CreateFolderActivity : BaseActivity() {
                 Toast.makeText(this, "Введите название папки", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            val db = TaskDatabaseHelper(this)
-            db.insertFolder(Folder(name = name, colorIndex = selectedColorIndex))
-            setResult(Activity.RESULT_OK)
+            // Pass folder data back to FolderListFragment — it will insert via ViewModel
+            val resultIntent = Intent().apply {
+                putExtra(EXTRA_FOLDER_NAME,  name)
+                putExtra(EXTRA_FOLDER_COLOR, selectedColorIndex)
+            }
+            setResult(Activity.RESULT_OK, resultIntent)
             finish()
         }
     }

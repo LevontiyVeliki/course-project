@@ -2,12 +2,20 @@ package com.example.taskplanner_new_1
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
+import android.view.View
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity  // kept for imports
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import com.example.taskplanner_new_1.api.ChangePasswordRequest
 import com.example.taskplanner_new_1.api.RetrofitClient
@@ -17,24 +25,36 @@ import com.example.taskplanner_new_1.auth.SessionManager
 import com.example.taskplanner_new_1.data.TaskDatabaseHelper
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.imageview.ShapeableImageView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
 
 class ProfileActivity : BaseActivity() {
 
     private lateinit var sessionManager: SessionManager
 
     // View-ссылки
-    private lateinit var tvAvatar:       TextView
-    private lateinit var tvUsername:     TextView
-    private lateinit var tvRoleBadge:    TextView
-    private lateinit var tvEmail:        TextView
-    private lateinit var etFullName:     EditText
-    private lateinit var tvCreatedAt:    TextView
-    private lateinit var tvTaskCount:    TextView
+    private lateinit var tvAvatar:          TextView
+    private lateinit var ivAvatar:          ShapeableImageView
+    private lateinit var avatarContainer:   FrameLayout
+    private lateinit var tvUsername:        TextView
+    private lateinit var tvRoleBadge:       TextView
+    private lateinit var tvEmail:           TextView
+    private lateinit var etFullName:        EditText
+    private lateinit var tvCreatedAt:       TextView
+    private lateinit var tvTaskCount:       TextView
     private lateinit var btnSaveProfile:     MaterialButton
     private lateinit var btnChangePassword: MaterialButton
+
+    // Gallery picker — no permissions needed with GetContent()
+    private val imagePickerLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let { copyAndShowAvatar(it) }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,15 +69,25 @@ class ProfileActivity : BaseActivity() {
         val toolbar = findViewById<MaterialToolbar>(R.id.profile_toolbar)
         toolbar.setNavigationOnClickListener { finish() }
 
-        tvAvatar       = findViewById(R.id.tv_avatar)
-        tvUsername     = findViewById(R.id.tv_username)
-        tvRoleBadge    = findViewById(R.id.tv_role_badge)
-        tvEmail        = findViewById(R.id.tv_email)
-        etFullName     = findViewById(R.id.et_full_name)
-        tvCreatedAt    = findViewById(R.id.tv_created_at)
-        tvTaskCount    = findViewById(R.id.tv_task_count)
+        tvAvatar        = findViewById(R.id.tv_avatar)
+        ivAvatar        = findViewById(R.id.iv_avatar)
+        avatarContainer = findViewById(R.id.avatar_container)
+        tvUsername      = findViewById(R.id.tv_username)
+        tvRoleBadge     = findViewById(R.id.tv_role_badge)
+        tvEmail         = findViewById(R.id.tv_email)
+        etFullName      = findViewById(R.id.et_full_name)
+        tvCreatedAt     = findViewById(R.id.tv_created_at)
+        tvTaskCount     = findViewById(R.id.tv_task_count)
         btnSaveProfile     = findViewById(R.id.btn_save_profile)
         btnChangePassword  = findViewById(R.id.btn_change_password)
+
+        // Open gallery on avatar tap
+        avatarContainer.setOnClickListener {
+            imagePickerLauncher.launch("image/*")
+        }
+
+        // Restore previously saved avatar from internal storage
+        restoreAvatarFromDisk()
 
         // Кнопка внешнего вида
         findViewById<MaterialButton>(R.id.btn_appearance).setOnClickListener {
@@ -81,6 +111,7 @@ class ProfileActivity : BaseActivity() {
 
         // Кнопка выхода
         findViewById<MaterialButton>(R.id.btn_logout).setOnClickListener {
+            TaskDatabaseHelper(this).clearForUserSwitch()
             sessionManager.clearSession()
             RetrofitClient.token = null
             startActivity(
@@ -90,6 +121,53 @@ class ProfileActivity : BaseActivity() {
             )
             finish()
         }
+    }
+
+    /**
+     * Called when the user picks an image from the gallery.
+     * Copies the bitmap into app-internal storage (avatar.jpg) so it survives
+     * app restarts and revoking of gallery URI permissions.
+     */
+    private fun copyAndShowAvatar(uri: Uri) {
+        try {
+            val bitmap = decodeBitmapFromUri(uri)
+            // Save to internal storage — this path is always accessible by the app
+            val file = File(filesDir, "avatar.jpg")
+            FileOutputStream(file).use { out ->
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
+            }
+            sessionManager.saveAvatarUri(file.absolutePath)
+            displayAvatarBitmap(bitmap)
+        } catch (_: Exception) {
+            Toast.makeText(this, "Не удалось загрузить изображение", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    /**
+     * Loads the previously saved avatar from app-internal storage on Activity start.
+     */
+    private fun restoreAvatarFromDisk() {
+        val path = sessionManager.getAvatarUri() ?: return
+        try {
+            val file = File(path)
+            if (!file.exists()) return
+            val bitmap = BitmapFactory.decodeFile(file.absolutePath) ?: return
+            displayAvatarBitmap(bitmap)
+        } catch (_: Exception) { /* silently ignore — initials fallback stays visible */ }
+    }
+
+    private fun decodeBitmapFromUri(uri: Uri): Bitmap =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, uri))
+        } else {
+            @Suppress("DEPRECATION")
+            MediaStore.Images.Media.getBitmap(contentResolver, uri)
+        }
+
+    private fun displayAvatarBitmap(bitmap: Bitmap) {
+        ivAvatar.setImageBitmap(bitmap)
+        ivAvatar.visibility = View.VISIBLE
+        tvAvatar.visibility = View.GONE
     }
 
     private fun showCached() {

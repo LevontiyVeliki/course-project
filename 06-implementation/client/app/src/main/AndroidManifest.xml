@@ -4,6 +4,14 @@
 
     <!-- Разрешение на доступ к интернету -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Push-уведомления (Android 13+) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Точные будильники для напоминаний о задачах -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <!-- Перезапуск будильников после перезагрузки устройства -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".TaskPlannerApplication"
@@ -15,7 +23,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TaskPlannernew_1"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="false">
 
         <!-- Экран входа — стартовый экран приложения -->
         <activity
@@ -51,6 +59,15 @@
         <activity
             android:name=".CreateFolderActivity"
             android:exported="false" />
+
+        <!-- Receiver: напоминания о задачах + перезапуск после ребута -->
+        <receiver
+            android:name=".notifications.TaskReminderReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
     </application>
 

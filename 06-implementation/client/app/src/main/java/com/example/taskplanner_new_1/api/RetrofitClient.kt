@@ -5,10 +5,11 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
-    // Для эмулятора Android используй 10.0.2.2 вместо localhost
-    private const val BASE_URL = "http://10.0.2.2:8080/"
+    // 10.0.2.2 — только для эмулятора. Для реального телефона — IP компьютера в локальной сети
+    const val BASE_URL = "https://taskplanner-server-production.up.railway.app/"
 
     // Токен хранится здесь после логина
     var token: String? = null
@@ -29,6 +30,9 @@ object RetrofitClient {
     private val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
             .addInterceptor(authInterceptor)
+            .connectTimeout(8, TimeUnit.SECONDS)
+            .readTimeout(15, TimeUnit.SECONDS)
+            .writeTimeout(15, TimeUnit.SECONDS)
             .build()
     }
 
