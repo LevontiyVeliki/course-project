@@ -8,15 +8,15 @@
 Клиент (Android)                    Сервер (Spring Boot)
        |                                    |
        | POST /api/auth/login               |
-       | {email, password}                  |
+       | {username, password}               |
        |----------------------------------->|
-       |                                    | 1. findByEmail()
+       |                                    | 1. findByUsername()
        |                                    | 2. BCrypt.matches(raw, hash)
        |                                    | 3. generateJwt(userId, role)
        |<-----------------------------------|
        | {token: "eyJ..."}                  |
        |                                    |
-       | GET /api/task-lists                |
+       | GET /api/tasklists                 |
        | Authorization: Bearer eyJ...       |
        |----------------------------------->|
        |                                    | 4. JwtFilter.doFilter()
@@ -104,7 +104,7 @@ Optional<TaskList> findByIdAndUserId(Long id, Long userId);
 ```kotlin
 // SessionManager.kt — токен в SharedPreferences
 class SessionManager(context: Context) {
-    private val prefs = context.getSharedPreferences("task_planner_prefs", Context.MODE_PRIVATE)
+    private val prefs = context.getSharedPreferences("taskplanner_session", Context.MODE_PRIVATE)
 
     fun saveToken(token: String) = prefs.edit().putString("jwt_token", token).apply()
     fun getToken(): String? = prefs.getString("jwt_token", null)

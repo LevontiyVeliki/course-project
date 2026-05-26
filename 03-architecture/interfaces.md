@@ -112,11 +112,11 @@ public interface ReminderRepository extends JpaRepository<Reminder, Long> {
 | POST | `/api/auth/login` | Вход, возврат JWT | Нет |
 | GET | `/api/users/me` | Профиль текущего пользователя | JWT |
 | PUT | `/api/users/me` | Обновление профиля | JWT |
-| GET | `/api/task-lists` | Список папок пользователя | JWT |
-| POST | `/api/task-lists` | Создать папку | JWT |
-| PUT | `/api/task-lists/{id}` | Обновить папку | JWT |
-| DELETE | `/api/task-lists/{id}` | Удалить папку | JWT |
-| GET | `/api/task-lists/{id}/tasks` | Задачи в папке | JWT |
+| GET | `/api/tasklists` | Список папок пользователя | JWT |
+| POST | `/api/tasklists` | Создать папку | JWT |
+| PUT | `/api/tasklists/{id}` | Обновить папку | JWT |
+| DELETE | `/api/tasklists/{id}` | Удалить папку | JWT |
+| GET | `/api/tasks/tasklist/{id}` | Задачи в папке | JWT |
 | POST | `/api/tasks` | Создать задачу | JWT |
 | PUT | `/api/tasks/{id}` | Обновить задачу | JWT |
 | DELETE | `/api/tasks/{id}` | Удалить задачу | JWT |

@@ -73,7 +73,7 @@
 | Task | defaultValues, copy.isDone, copy preserves fields, equality |
 | Task + Subtask | withSubtasks storesSubtasks |
 | Subtask | defaultValues, copy.isDone, equality |
-| Folder | defaultValues, colorPalette size, firstColorIsBlue, copy.name, equality, taskCount |
+| Folder | defaultValues, colorPalette size, firstColorIsGreen, copy.name, equality, taskCount |
 
 ---
 
@@ -150,7 +150,13 @@ class DataClassTest {
     @Test
     fun folder_colorPalette_hasFourColors() {
         assertEquals(4, Folder.FOLDER_COLORS.size)
-        assertEquals("#2196F3", Folder.FOLDER_COLORS[0])
+        assertEquals(4, Folder.COLOR_NAMES.size)
+    }
+
+    @Test
+    fun folder_colorPalette_firstColorIsGreen() {
+        assertEquals("#4CAF50", Folder.FOLDER_COLORS[0])
+        assertEquals("Низкий приоритет", Folder.COLOR_NAMES[0])
     }
 
     @Test

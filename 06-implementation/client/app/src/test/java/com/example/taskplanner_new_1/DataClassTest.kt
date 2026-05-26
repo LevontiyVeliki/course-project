@@ -106,9 +106,9 @@ class DataClassTest {
     }
 
     @Test
-    fun folder_colorPalette_firstColorIsBlue() {
-        assertEquals("#2196F3", Folder.FOLDER_COLORS[0])
-        assertEquals("Синий", Folder.COLOR_NAMES[0])
+    fun folder_colorPalette_firstColorIsGreen() {
+        assertEquals("#4CAF50", Folder.FOLDER_COLORS[0])
+        assertEquals("Низкий приоритет", Folder.COLOR_NAMES[0])
     }
 
     @Test

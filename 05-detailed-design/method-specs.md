@@ -28,7 +28,7 @@ public ResponseEntity<UserResponse> register(@Valid @RequestBody RegisterRequest
 
 ```java
 /**
- * GET /api/task-lists
+ * GET /api/tasklists
  * Получение всех папок текущего пользователя.
  * @param principal — извлекается из JWT
  */
@@ -36,7 +36,7 @@ public ResponseEntity<UserResponse> register(@Valid @RequestBody RegisterRequest
 public ResponseEntity<List<TaskListResponse>> getAll(Principal principal);
 
 /**
- * POST /api/task-lists
+ * POST /api/tasklists
  * Создание новой папки.
  */
 @PostMapping
@@ -46,7 +46,7 @@ public ResponseEntity<TaskListResponse> create(
 );
 
 /**
- * PUT /api/task-lists/{id}
+ * PUT /api/tasklists/{id}
  * Обновление существующей папки.
  * Возвращает 403, если папка принадлежит другому пользователю.
  */
@@ -58,7 +58,7 @@ public ResponseEntity<TaskListResponse> update(
 );
 
 /**
- * DELETE /api/task-lists/{id}
+ * DELETE /api/tasklists/{id}
  * Удаление папки. Каскадно удаляет все задачи через БД.
  */
 @DeleteMapping("/{id}")
@@ -69,12 +69,12 @@ public ResponseEntity<Void> delete(@PathVariable Long id, Principal principal);
 
 ```java
 /**
- * GET /api/tasks?listId={id}
+ * GET /api/tasks/tasklist/{id}
  * Получение задач для конкретной папки.
  */
-@GetMapping
+@GetMapping("/tasklist/{listId}")
 public ResponseEntity<List<TaskResponse>> getByList(
-    @RequestParam Long listId,
+    @PathVariable Long listId,
     Principal principal
 );
 

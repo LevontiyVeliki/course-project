@@ -43,7 +43,7 @@ User user = userRepository.findById(userId)
 
 ## RF-003: Вынесение JWT-секрета в конфигурацию
 
-**Изменённые файлы:** `JwtService.java`, `application.properties`
+**Изменённые файлы:** `JwtTokenProvider.java`, `application.properties`
 
 **Суть:** Секретный ключ JWT перенесён из исходного кода в файл конфигурации (и далее в переменную окружения для продакшена).
 
