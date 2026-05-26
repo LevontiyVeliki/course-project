@@ -93,7 +93,7 @@ curl http://localhost:8080/actuator/health
 ```kotlin
 // RetrofitClient.kt
 // Текущий продакшн-URL (Railway):
-const val BASE_URL = "https://taskplanner-server.up.railway.app/"
+const val BASE_URL = "https://taskplanner-server-production.up.railway.app/"
 
 // Для локальной разработки:
 // const val BASE_URL = "http://10.0.2.2:8080/"   // эмулятор

@@ -3,7 +3,7 @@
 ## Базовый URL
 
 ```
-https://taskplanner-server.up.railway.app/api
+https://taskplanner-server-production.up.railway.app/api
 ```
 
 > Для локального запуска: `http://localhost:8080/api`

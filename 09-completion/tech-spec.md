@@ -106,7 +106,7 @@
 ## 5. Интерфейс взаимодействия
 
 Клиент (Android) взаимодействует с сервером (Spring Boot) через REST API.  
-Базовый URL: `https://taskplanner-server.up.railway.app/api`
+Базовый URL: `https://taskplanner-server-production.up.railway.app/api`
 
 Подробная документация эндпоинтов: [api-endpoints.md](../08-interface/api-endpoints.md)  
 Документация интерфейсов: [interfaces.md](../03-architecture/interfaces.md)
