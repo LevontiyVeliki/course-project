@@ -32,30 +32,37 @@ taskplanner-server/
 │   │   ├── UserService.java
 │   │   ├── TaskListService.java
 │   │   ├── TaskService.java
-│   │   └── JwtService.java
+│   │   ├── AuthService.java
+│   │   └── ReminderService.java
+│   ├── security/
+│   │   ├── JwtTokenProvider.java       ← генерация и валидация JWT
+│   │   ├── JwtAuthenticationFilter.java
+│   │   ├── UserDetailsImpl.java
+│   │   └── UserDetailsServiceImpl.java
 │   ├── repository/
 │   │   ├── UserRepository.java
 │   │   ├── TaskListRepository.java
-│   │   └── TaskRepository.java
+│   │   ├── TaskRepository.java
+│   │   └── ReminderRepository.java
 │   ├── entity/
 │   │   ├── User.java
 │   │   ├── TaskList.java
-│   │   └── Task.java
+│   │   ├── Task.java
+│   │   ├── Reminder.java
+│   │   └── enums/
+│   │       ├── Priority.java           ← LOW, MEDIUM, HIGH, URGENT
+│   │       ├── Role.java
+│   │       ├── TaskStatus.java
+│   │       └── TaskListStatus.java
 │   ├── dto/
-│   │   ├── request/
-│   │   │   ├── LoginRequest.java
-│   │   │   ├── RegisterRequest.java
-│   │   │   ├── CreateTaskListRequest.java
-│   │   │   └── CreateTaskRequest.java
-│   │   └── response/
-│   │       ├── JwtResponse.java
-│   │       ├── UserResponse.java
-│   │       ├── TaskListResponse.java
-│   │       └── TaskResponse.java
-│   └── exception/
-│       ├── EntityNotFoundException.java
-│       ├── AccessDeniedException.java
-│       └── GlobalExceptionHandler.java
+│   │   ├── LoginRequest.java
+│   │   ├── RegisterRequest.java
+│   │   ├── JwtResponse.java
+│   │   └── UserProfileDto.java
+│   └── config/
+│       ├── SecurityConfig.java
+│       ├── GlobalExceptionHandler.java
+│       └── OpenAPIConfig.java
 ├── src/main/resources/
 │   └── application.properties          ← БД, JWT-секрет, Swagger
 └── src/test/java/com/levon/taskplanner/

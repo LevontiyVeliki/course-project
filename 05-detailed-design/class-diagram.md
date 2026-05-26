@@ -2,7 +2,7 @@
 
 ## Диаграмма
 
-![Диаграмма классов проектирования](<images/class-diagram.jpg>)
+<!-- TODO: добавить диаграмму классов — images/class-diagram.jpg -->
 
 ---
 

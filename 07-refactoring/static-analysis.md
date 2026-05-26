@@ -115,4 +115,4 @@ public class TaskListMapper {
 | Unused resources | 3 | 0 |
 | Deprecated API calls | 2 | 0 |
 
-![Результат SonarQube](<images/sonar-report.png>)
+<!-- TODO: добавить скриншот отчёта SonarQube — images/sonar-report.png -->

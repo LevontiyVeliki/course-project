@@ -137,11 +137,11 @@ public class TaskService implements ITaskService {
 
 ---
 
-## JwtService
+## JwtTokenProvider
 
 ```java
-@Service
-public class JwtService {
+@Component
+public class JwtTokenProvider {
 
     @Value("${jwt.secret}")
     private String secretKey;
