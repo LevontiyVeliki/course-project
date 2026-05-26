@@ -165,7 +165,7 @@ public class Task {
 }
 
 public enum TaskStatus  { PENDING, COMPLETED, OVERDUE }
-public enum Priority    { LOW, MEDIUM, HIGH }
+public enum Priority    { LOW, MEDIUM, HIGH, URGENT }
 ```
 
 ---
@@ -176,7 +176,7 @@ public enum Priority    { LOW, MEDIUM, HIGH }
 
 ```java
 public record LoginRequest(
-    @NotBlank String email,
+    @NotBlank String username,
     @NotBlank String password
 ) {}
 

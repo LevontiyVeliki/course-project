@@ -60,14 +60,14 @@ CREATE TABLE tasks (
     updated_at TIMESTAMP,
     CONSTRAINT fk_tasks_list FOREIGN KEY (task_list_id) REFERENCES task_lists(id) ON DELETE CASCADE,
     CONSTRAINT chk_tasks_status CHECK (status IN ('PENDING', 'COMPLETED', 'OVERDUE')),
-    CONSTRAINT chk_tasks_priority CHECK (priority IN ('LOW', 'MEDIUM', 'HIGH'))
+    CONSTRAINT chk_tasks_priority CHECK (priority IN ('LOW', 'MEDIUM', 'HIGH', 'URGENT'))
 );
 
 COMMENT ON TABLE tasks IS 'Individual tasks within a list';
 COMMENT ON COLUMN tasks.task_list_id IS 'Parent task list';
 COMMENT ON COLUMN tasks.description IS 'Task text';
 COMMENT ON COLUMN tasks.status IS 'Status: PENDING, COMPLETED, OVERDUE';
-COMMENT ON COLUMN tasks.priority IS 'Priority: LOW, MEDIUM, HIGH';
+COMMENT ON COLUMN tasks.priority IS 'Priority: LOW, MEDIUM, HIGH, URGENT';
 COMMENT ON COLUMN tasks.order_index IS 'Sort order in UI';
 
 -- Index for sorting tasks within a list

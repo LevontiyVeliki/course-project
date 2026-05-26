@@ -3,8 +3,10 @@
 ## Базовый URL
 
 ```
-http://localhost:8080/api
+https://taskplanner-server.up.railway.app/api
 ```
+
+> Для локального запуска: `http://localhost:8080/api`
 
 **Swagger UI:** `http://localhost:8080/swagger-ui/index.html`
 
@@ -22,7 +24,7 @@ Authorization: Bearer <JWT-TOKEN>
 
 ---
 
-## Эндпоинты (12 штук — требование: 8+)
+## Эндпоинты (15 штук — требование: 8+)
 
 ### Аутентификация (`/api/auth`)
 
@@ -36,14 +38,8 @@ Authorization: Bearer <JWT-TOKEN>
   "password": "secret123"
 }
 
-// Ответ 201 Created
-{
-  "id": 1,
-  "username": "john",
-  "email": "john@example.com",
-  "role": "USER",
-  "createdAt": "2026-03-01T10:00:00"
-}
+// Ответ 200 OK
+"User registered successfully"
 
 // Ошибки: 400 (невалидные данные), 409 (email/логин уже занят)
 ```
@@ -53,7 +49,7 @@ Authorization: Bearer <JWT-TOKEN>
 ```json
 // Запрос
 {
-  "email": "john@example.com",
+  "username": "john",
   "password": "secret123"
 }
 
@@ -61,7 +57,7 @@ Authorization: Bearer <JWT-TOKEN>
 {
   "token": "eyJhbGciOiJIUzI1NiJ9...",
   "type": "Bearer",
-  "userId": 1,
+  "id": 1,
   "username": "john",
   "email": "john@example.com",
   "role": "USER"
@@ -84,12 +80,12 @@ Authorization: Bearer <JWT-TOKEN>
   "email": "john@example.com",
   "fullName": "Иванов Иван",
   "role": "USER",
-  "createdAt": "2026-03-01T10:00:00",
-  "taskCount": 15
+  "createdAt": "01.03.2026 10:00",
+  "taskListsCount": 5
 }
 ```
 
-#### PUT /api/users/me — Обновление профиля
+#### PATCH /api/users/me — Обновление профиля (полное имя)
 
 ```json
 // Запрос
@@ -97,14 +93,29 @@ Authorization: Bearer <JWT-TOKEN>
   "fullName": "Иванов Иван Иванович"
 }
 
-// Ответ 200 OK — обновлённый профиль
+// Ответ 200 OK
+"updated"
+```
+
+#### PATCH /api/users/me/password — Смена пароля
+
+```json
+// Запрос
+{
+  "newPassword": "newSecret456"
+}
+
+// Ответ 200 OK
+"password updated"
+
+// Ошибки: 400 (пароль менее 6 символов)
 ```
 
 ---
 
-### Папки / Списки задач (`/api/task-lists`)
+### Папки / Списки задач (`/api/tasklists`)
 
-#### GET /api/task-lists — Список папок пользователя
+#### GET /api/tasklists — Список папок пользователя
 
 ```json
 // Ответ 200 OK
@@ -120,13 +131,14 @@ Authorization: Bearer <JWT-TOKEN>
 ]
 ```
 
-#### POST /api/task-lists — Создать папку
+#### POST /api/tasklists — Создать папку
 
 ```json
 // Запрос
 {
   "name": "Учёба",
-  "targetDate": "2026-05-15"
+  "targetDate": "2026-05-15",
+  "status": "ACTIVE"
 }
 
 // Ответ 201 Created
@@ -139,14 +151,14 @@ Authorization: Bearer <JWT-TOKEN>
 }
 ```
 
-#### GET /api/task-lists/{id} — Получить папку по ID
+#### GET /api/tasklists/{id} — Получить папку по ID
 
 ```
 // Ответ 200 OK — объект папки
 // Ошибки: 404 (не найдена), 403 (чужая папка)
 ```
 
-#### PUT /api/task-lists/{id} — Обновить папку
+#### PUT /api/tasklists/{id} — Обновить папку
 
 ```json
 // Запрос
@@ -157,10 +169,10 @@ Authorization: Bearer <JWT-TOKEN>
 // Ответ 200 OK
 ```
 
-#### DELETE /api/task-lists/{id} — Удалить папку
+#### DELETE /api/tasklists/{id} — Удалить папку
 
 ```
-// Ответ 204 No Content
+// Ответ 200 OK
 // Каскадно удаляет все задачи через ON DELETE CASCADE
 ```
 
@@ -168,7 +180,7 @@ Authorization: Bearer <JWT-TOKEN>
 
 ### Задачи (`/api/tasks`)
 
-#### GET /api/tasks?listId={id} — Задачи в папке
+#### GET /api/tasks/tasklist/{taskListId} — Задачи в папке
 
 ```json
 // Ответ 200 OK
@@ -179,23 +191,24 @@ Authorization: Bearer <JWT-TOKEN>
     "description": "Написать отчёт",
     "status": "PENDING",
     "priority": "HIGH",
-    "createdAt": "2026-05-01T08:00:00"
+    "orderIndex": 0
   },
   ...
 ]
 ```
 
-#### POST /api/tasks — Создать задачу
+#### POST /api/tasks/tasklist/{taskListId} — Создать задачу в папке
 
 ```json
 // Запрос
 {
-  "taskListId": 5,
   "description": "Сдать курсовую",
-  "priority": "HIGH"
+  "status": "PENDING",
+  "priority": "HIGH",
+  "orderIndex": 0
 }
 
-// Ответ 201 Created
+// Ответ 201 Created — объект созданной задачи
 ```
 
 #### PUT /api/tasks/{id} — Обновить задачу
@@ -204,8 +217,9 @@ Authorization: Bearer <JWT-TOKEN>
 // Запрос
 {
   "description": "Обновлённое название",
-  "isDone": true,
-  "priority": "MEDIUM"
+  "status": "COMPLETED",
+  "priority": "MEDIUM",
+  "orderIndex": 0
 }
 
 // Ответ 200 OK
@@ -214,7 +228,7 @@ Authorization: Bearer <JWT-TOKEN>
 #### DELETE /api/tasks/{id} — Удалить задачу
 
 ```
-// Ответ 204 No Content
+// Ответ 200 OK
 ```
 
 ---
@@ -226,21 +240,30 @@ Authorization: Bearer <JWT-TOKEN>
 | 1 | POST | `/api/auth/register` | Регистрация | Нет |
 | 2 | POST | `/api/auth/login` | Вход, получение токена | Нет |
 | 3 | GET | `/api/users/me` | Профиль пользователя | JWT |
-| 4 | PUT | `/api/users/me` | Обновление профиля | JWT |
-| 5 | GET | `/api/task-lists` | Все папки пользователя | JWT |
-| 6 | POST | `/api/task-lists` | Создать папку | JWT |
-| 7 | GET | `/api/task-lists/{id}` | Получить папку | JWT |
-| 8 | PUT | `/api/task-lists/{id}` | Обновить папку | JWT |
-| 9 | DELETE | `/api/task-lists/{id}` | Удалить папку | JWT |
-| 10 | GET | `/api/tasks?listId={id}` | Задачи папки | JWT |
-| 11 | POST | `/api/tasks` | Создать задачу | JWT |
-| 12 | PUT | `/api/tasks/{id}` | Обновить задачу | JWT |
-| 13 | DELETE | `/api/tasks/{id}` | Удалить задачу | JWT |
+| 4 | PATCH | `/api/users/me` | Обновление полного имени | JWT |
+| 5 | PATCH | `/api/users/me/password` | Смена пароля | JWT |
+| 6 | GET | `/api/tasklists` | Все папки пользователя | JWT |
+| 7 | POST | `/api/tasklists` | Создать папку | JWT |
+| 8 | GET | `/api/tasklists/{id}` | Получить папку | JWT |
+| 9 | PUT | `/api/tasklists/{id}` | Обновить папку | JWT |
+| 10 | DELETE | `/api/tasklists/{id}` | Удалить папку | JWT |
+| 11 | GET | `/api/tasks/tasklist/{id}` | Задачи папки | JWT |
+| 12 | POST | `/api/tasks/tasklist/{id}` | Создать задачу | JWT |
+| 13 | GET | `/api/tasks/{id}` | Получить задачу по ID | JWT |
+| 14 | PUT | `/api/tasks/{id}` | Обновить задачу | JWT |
+| 15 | DELETE | `/api/tasks/{id}` | Удалить задачу | JWT |
 
-**Итого: 13 эндпоинтов** — требование 8+ выполнено ✅
+**Итого: 15 эндпоинтов** — требование 8+ выполнено ✅
 
 ---
 
-## Swagger UI
+## Приоритеты задач
 
-![Swagger UI](<images/swagger-ui.png>)
+| Значение | Описание | Цвет папки |
+|---|---|---|
+| `LOW` | Низкий приоритет | 🟢 Зелёный |
+| `MEDIUM` | Средний приоритет | 🔵 Синий |
+| `HIGH` | Высокий приоритет | 🔴 Красный |
+| `URGENT` | Наивысший приоритет | 🟣 Фиолетовый |
+
+Приоритет задачи определяется автоматически по цвету папки, в которой она находится.
