@@ -36,6 +36,14 @@
 | Kotlin (Android) | 73.8% |
 | Java (Spring Boot) | 26.2% |
 
+### График активности коммитов
+
+![График активности коммитов](09-completion/images/commit-activity.png)
+
+### Тепловая карта активности (Punch Card)
+
+![Punch Card](09-completion/images/punch-card.png)
+
 ---
 
 ## Описание проекта
